@@ -20,10 +20,34 @@
 
 L'application fonctionne **entièrement hors ligne**. Vos données restent sur votre ordinateur, dans de simples fichiers CSV.
 
-<!-- Ajoutez vos captures d'écran dans un dossier docs/ puis décommentez les lignes ci-dessous :
-![Écran d'accueil](docs/accueil.png)
-![Tableau de bord d'un projet](docs/tableau-de-bord.png)
--->
+<p align="center">
+  <img src="docs/accueil.png" alt="Écran d'accueil de Finances Pro" width="100%">
+</p>
+
+## Aperçu
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/tableau-de-bord.png" alt="Tableau de bord"><br><sub><b>Tableau de bord</b> : saisie d'une opération, dépenses par catégorie et score de santé financière</sub></td>
+    <td width="50%"><img src="docs/historique.png" alt="Historique"><br><sub><b>Historique</b> : toutes les opérations, avec modification, annulation et import/export CSV</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/courbe.png" alt="Courbe"><br><sub><b>Courbe</b> : évolution chronologique avec filtres par type, catégorie et période</sub></td>
+    <td width="50%"><img src="docs/repartition.png" alt="Répartition"><br><sub><b>Répartition</b> : diagramme circulaire des dépenses par catégorie</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/mensuel.png" alt="Comparaison mensuelle"><br><sub><b>Mensuel</b> : revenus, dépenses et épargne sur les 12 derniers mois</sub></td>
+    <td width="50%"><img src="docs/analyse.png" alt="Analyse intelligente"><br><sub><b>Analyse</b> : indicateurs clés et conseils automatiques</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/objectifs.png" alt="Simulateur d'objectifs"><br><sub><b>Objectifs</b> : simulateur de projection d'épargne</sub></td>
+    <td width="50%"><img src="docs/rapport.png" alt="Rapport imprimable"><br><sub><b>Rapport</b> : document prêt à imprimer ou à enregistrer en PDF</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/verrouillage.png" alt="Écran verrouillé"><br><sub><b>Verrouillage</b> : l'accès est protégé par un code PIN</sub></td>
+    <td width="50%"><img src="docs/demarrage.png" alt="Écran de démarrage"><br><sub><b>Démarrage</b> : chargement animé des projets</sub></td>
+  </tr>
+</table>
 
 ## Fonctionnalités
 
@@ -140,7 +164,9 @@ Une mise à jour ou une réinstallation de l'application **n'efface pas** vos do
 
 ```
 finances-pro/
+├── README.md
 ├── pom.xml
+├── docs/                      # captures d'écran du README
 └── src/main/java/com/mycompany/tpjavagraphique/
     └── TpJavaGraphique.java   # application complète
 ```
