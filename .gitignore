@@ -1,0 +1,37 @@
+# Fichiers compilés Java et Maven
+target/
+out/
+build/
+dist/
+*.class
+*.jar
+*.war
+*.ear
+
+# Installateurs générés (jpackage)
+installateur/
+*.exe
+*.deb
+*.dmg
+*.msi
+
+# Fichiers spécifiques NetBeans et autres IDE
+nbproject/private/
+.nb-gradle/
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Données financières locales et sauvegardes de test
+budget_mensuel.csv
+FinancesPro/
+*.zip
+*.log
+
+# Fichiers système (Linux / Windows / macOS)
+.DS_Store
+Thumbs.db
+*~
