@@ -21,7 +21,7 @@
 L'application fonctionne **entièrement hors ligne**. Vos données restent sur votre ordinateur, dans de simples fichiers CSV.
 
 <p align="center">
-  <img src="accueil.png" alt="Écran d'accueil mode sombre de Finances Pro" width="100%">
+  <img src="accueil-1.png" alt="Écran d'accueil mode sombre de Finances Pro" width="100%">
 </p>
 <p align="center">
   <img src="accueil-clair.png" alt="Écran d'accueil mode clair de Finances Pro" width="100%">
