@@ -23,6 +23,9 @@ L'application fonctionne **entièrement hors ligne**. Vos données restent sur v
 <p align="center">
   <img src="accueil.png" alt="Écran d'accueil de Finances Pro" width="100%">
 </p>
+<p align="center">
+  <img src="accueil_clair.png" alt="Écran d'accueil de Finances Pro" width="100%">
+</p>
 
 ## Aperçu
 
