@@ -1,7 +1,5 @@
 package com.mycompany.tpjavagraphique;
 
-
-
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.DocumentEvent;
@@ -78,7 +76,7 @@ public class TpJavaGraphique extends JFrame {
             ORANGE = new Color(255, 150, 0); YELLOW = new Color(255, 220, 0); SUR = Color.BLACK;
             BG1 = new Color(8, 8, 20); BG2 = new Color(24, 8, 36); GRID = new Color(40, 45, 65); AXE = new Color(100, 110, 150);
             TRACK = new Color(25, 25, 38); TILE = new Color(22, 24, 38); TBL = new Color(12, 12, 18); TGRID = new Color(50, 60, 90);
-            THEAD = new Color(25, 25, 40); ZEBRA = new Color(22, 22, 32); CHAMP = CHAMP; SEL = new Color(0, 140, 255);
+            THEAD = new Color(25, 25, 40); ZEBRA = new Color(22, 22, 32); CHAMP = new Color(120, 130, 160); SEL = new Color(0, 140, 255);
         }
         COULEURS = new Color[]{GREEN, BLUE, PURPLE, ORANGE, RED, YELLOW};
         PAL = new Color[]{GREEN, BLUE, PURPLE, ORANGE, RED, YELLOW, new Color(255, 90, 180), new Color(0, 200, 190), new Color(120, 190, 40), clair ? new Color(110, 120, 140) : Color.WHITE};
@@ -98,8 +96,6 @@ public class TpJavaGraphique extends JFrame {
 
     static Color arc(float h) { return CLAIR ? Color.getHSBColor(0.58f + 0.07f * (float) Math.sin(h * 6.28), 0.9f, 0.55f) : Color.getHSBColor(h, 0.7f, 1f); }
     static final String[] NOMS_COULEURS = {"Vert", "Bleu", "Violet", "Orange", "Rouge", "Jaune"};
-    static final String[] ICONES = {"Épargne", "Objectif", "Maison", "Voiture", "Études", "Informatique", "Voyage", "Courses", "Téléphone", "Cadeau", "Santé", "Croissance"};
-    static String typeProjet(String ic) { for (String s : ICONES) if (s.equals(ic)) return s; return ""; }
     static final String[] TYPES = {"Revenu", "Dépense", "Épargne"};
     static final String[] CATS = {"Bourse / Salaire", "Projet Tech / Freelance", "Alimentation", "Transport",
         "Internet & Électricité", "Fonds d'Urgence", "Loyer", "Santé", "Loisirs", "Éducation", "Autre"};
@@ -331,7 +327,7 @@ public class TpJavaGraphique extends JFrame {
 
     static String entete(String titre, String sous) {
         return "<!DOCTYPE html><html lang='fr'><head><meta charset='UTF-8'><title>" + esc(titre) + "</title>" + css()
-                + "</head><body><div class='page'><div class='noprint'><button onclick='window.print()' style='padding:8px 16px;font-size:14px'>🖨 Imprimer / Enregistrer en PDF</button></div>"
+                + "</head><body><div class='page'><div class='noprint'><button onclick='window.print()' style='padding:8px 16px;font-size:14px'>Imprimer / Enregistrer en PDF</button></div>"
                 + "<h1>" + esc(titre) + "</h1><p style='color:#556'>" + esc(sous) + "</p>";
     }
 
@@ -463,7 +459,7 @@ public class TpJavaGraphique extends JFrame {
     }
 
     void verrouiller() {
-        if (!pinActif()) { toast("Définissez d'abord un code PIN (bouton « Paramètres généraux »)", ORANGE); return; }
+        if (!pinActif()) { toast("Définissez d'abord un code PIN (Paramètres)", ORANGE); return; }
         if (vue != null) vue.sauver();
         racine.show(conteneur, "LOCK");
         verrou.champ.requestFocusInWindow();
@@ -556,16 +552,15 @@ public class TpJavaGraphique extends JFrame {
 
     Projet dialogueProjet(Projet init) {
         JTextField nom = new JTextField(init == null ? "" : init.nom);
-        JComboBox<String> ic = new JComboBox<>(ICONES);
         JComboBox<String> co = new JComboBox<>(NOMS_COULEURS);
         JTextField bud = new JTextField(init == null ? "0" : String.valueOf((long) init.budget));
         JTextField obj = new JTextField(init == null ? "0" : String.valueOf((long) init.objectif));
-        if (init != null) { ic.setSelectedItem(typeProjet(init.icone).isEmpty() ? ICONES[0] : init.icone); co.setSelectedIndex(init.couleur); }
+        if (init != null) co.setSelectedIndex(init.couleur);
         JPanel pn = new JPanel(new GridLayout(0, 2, 8, 10));
         pn.setBackground(PANEL);
-        pn.setPreferredSize(new Dimension(460, 230));
-        String[] lib = {"Nom du projet :", "Type de projet :", "Couleur :", "Budget dépenses / mois (0 = aucun) :", "Objectif d'épargne en " + DEV + " (0 = aucun) :"};
-        JComponent[] cs = {nom, ic, co, bud, obj};
+        pn.setPreferredSize(new Dimension(460, 200));
+        String[] lib = {"Nom du projet :", "Couleur :", "Budget dépenses / mois (0 = aucun) :", "Objectif d'épargne en " + DEV + " (0 = aucun) :"};
+        JComponent[] cs = {nom, co, bud, obj};
         for (int i = 0; i < cs.length; i++) { styler(cs[i]); pn.add(label(lib[i], f(Font.BOLD, 12), TXT2)); pn.add(cs[i]); }
         while (true) {
             int r = JOptionPane.showConfirmDialog(this, pn, init == null ? "Nouveau projet" : "Réglages du projet", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -575,7 +570,7 @@ public class TpJavaGraphique extends JFrame {
                 Projet p = new Projet();
                 p.id = init == null ? Long.toString(System.currentTimeMillis(), 36) : init.id;
                 p.nom = nom.getText().trim().replace(";", ",");
-                p.icone = (String) ic.getSelectedItem();
+                p.icone = init == null ? "" : init.icone;
                 p.couleur = co.getSelectedIndex();
                 p.budget = Math.max(0, nombre(bud.getText()));
                 p.objectif = Math.max(0, nombre(obj.getText()));
@@ -684,13 +679,13 @@ public class TpJavaGraphique extends JFrame {
             JFileChooser fc = new JFileChooser();
             fc.setSelectedFile(new File("FinancesPro_sauvegarde_" + LocalDate.now() + ".zip"));
             if (fc.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) return;
-            try { sauvegarder(fc.getSelectedFile()); toast("Sauvegarde créée", GREEN); } catch (IOException ex) { toast("Échec : " + ex.getMessage(), RED); }
+            try { sauvegarder(fc.getSelectedFile()); toast("Sauvegarde créée ", GREEN); } catch (IOException ex) { toast("Échec : " + ex.getMessage(), RED); }
         });
         b.addActionListener(e -> {
             JFileChooser fc = new JFileChooser();
             if (fc.showOpenDialog(this) != JFileChooser.APPROVE_OPTION) return;
             if (JOptionPane.showConfirmDialog(this, "La restauration remplace les projets du même nom. Continuer ?", "Restaurer", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return;
-            try { restaurer(fc.getSelectedFile()); toast("Sauvegarde restaurée", GREEN); } catch (IOException ex) { toast("Échec : " + ex.getMessage(), RED); }
+            try { restaurer(fc.getSelectedFile()); toast("Sauvegarde restaurée ", GREEN); } catch (IOException ex) { toast("Échec : " + ex.getMessage(), RED); }
         });
         m.add(a);
         m.add(b);
@@ -785,7 +780,7 @@ public class TpJavaGraphique extends JFrame {
             }
             g.setColor(TXT);
             g.setFont(f(Font.BOLD, 44));
-            centre(g, "FP", cx, cy + 16);
+            g.fillPolygon(new int[]{cx + 8, cx - 12, cx - 1, cx - 9, cx + 14, cx + 3}, new int[]{cy - 26, cy + 4, cy + 4, cy + 28, cy - 8, cy - 8}, 6);
             g.setFont(f(Font.BOLD, 46));
             String tt = "FINANCES PRO";
             int tw = g.getFontMetrics().stringWidth(tt);
@@ -880,9 +875,13 @@ public class TpJavaGraphique extends JFrame {
                 g.setStroke(new BasicStroke(2f));
                 g.drawOval(cx - r, cy - r, 2 * r, 2 * r);
             }
-            g.setFont(f(Font.BOLD, 26));
             g.setColor(TXT);
-            centre(g, "VERROUILLÉ", cx, cy + 10);
+            g.setStroke(new BasicStroke(7f));
+            g.draw(new Arc2D.Double(cx - 20, cy - 40, 40, 50, 0, 180, Arc2D.OPEN));
+            g.fillRoundRect(cx - 30, cy - 6, 60, 46, 12, 12);
+            g.setColor(BG1);
+            g.fillOval(cx - 6, cy + 8, 12, 12);
+            g.fillRect(cx - 2, cy + 16, 4, 12);
             g.dispose();
         }
     }
@@ -904,7 +903,7 @@ public class TpJavaGraphique extends JFrame {
             "La règle 50/30/20 : 50% besoins, 30% envies, 20% épargne.",
             "Créez un projet par objectif : ordinateur, voyage, fonds d'urgence…",
             "Épargnez dès que vous recevez de l'argent, pas à la fin du mois.",
-            "Fixez un budget mensuel dans « Réglages du projet » pour être alerté en cas de dépassement.",
+            "Fixez un budget mensuel dans Réglages pour être alerté en cas de dépassement.",
             "Générez un rapport imprimable (PDF) depuis chaque projet : Ctrl+R.",
             "Un fonds d'urgence = 3 à 6 mois de dépenses.",
             "F11 : mode présentation plein écran — Ctrl+L : verrouiller l'application."};
@@ -947,7 +946,7 @@ public class TpJavaGraphique extends JFrame {
             haut.setOpaque(false);
             haut.setPreferredSize(new Dimension(0, 170));
 
-            JButton nouveau = bouton("NOUVEAU PROJET", GREEN, SUR);
+            JButton nouveau = bouton("+  NOUVEAU PROJET", GREEN, SUR);
             nouveau.setFont(f(Font.BOLD, 16));
             nouveau.setPreferredSize(new Dimension(260, 46));
             nouveau.addActionListener(e -> nouveauProjet());
@@ -962,14 +961,16 @@ public class TpJavaGraphique extends JFrame {
             JPanel barre = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 4));
             barre.setOpaque(false);
             barre.add(nouveau);
-            barre.add(label("Rechercher :", f(Font.BOLD, 14), TXT));
+            barre.add(label("Rechercher :", f(Font.BOLD, 13), TXT2));
             barre.add(recherche);
-            String[][] pb = {{"Rapport global", "Rapport global (imprimable / PDF)"}, {"Sauvegarde", "Sauvegarde & restauration"}, {"Paramètres généraux", "Paramètres généraux & code PIN"}, {"Verrouiller", "Verrouiller (Ctrl+L)"}, {"Aide", "Aide & raccourcis"}, {CLAIR ? "Thème sombre" : "Thème clair", "Changer de thème : clair / sombre (Ctrl+T)"}};
+            JPanel barre2 = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 4));
+            barre2.setOpaque(false);
+            String[][] pb = {{"Rapport", "Rapport global (imprimable / PDF)"}, {"Sauvegarde", "Sauvegarde & restauration"}, {"Paramètres", "Paramètres généraux & code PIN"}, {"Verrouiller", "Verrouiller (Ctrl+L)"}, {"Aide", "Aide & raccourcis"}, {CLAIR ? "Thème sombre" : "Thème clair", "Changer de thème : clair / sombre (Ctrl+T)"}};
             for (int i = 0; i < pb.length; i++) {
                 final int k = i;
                 JButton b = bouton(pb[i][0], INPUT, TXT);
                 b.setToolTipText(pb[i][1]);
-                b.setPreferredSize(new Dimension(b.getPreferredSize().width, 40));
+                b.setPreferredSize(new Dimension(Math.max(96, b.getPreferredSize().width), 38));
                 b.addActionListener(e -> {
                     if (k == 0) rapportGlobalAction();
                     else if (k == 1) menuSauvegarde(b);
@@ -978,12 +979,16 @@ public class TpJavaGraphique extends JFrame {
                     else if (k == 4) aide();
                     else basculerTheme();
                 });
-                barre.add(b);
+                barre2.add(b);
             }
             JPanel nord = new JPanel(new BorderLayout());
             nord.setOpaque(false);
             nord.add(haut, BorderLayout.CENTER);
-            nord.add(barre, BorderLayout.SOUTH);
+            JPanel barres = new JPanel(new GridLayout(2, 1));
+            barres.setOpaque(false);
+            barres.add(barre);
+            barres.add(barre2);
+            nord.add(barres, BorderLayout.SOUTH);
 
             grille.setOpaque(false);
             JPanel enveloppe = new JPanel(new BorderLayout());
@@ -1180,16 +1185,17 @@ public class TpJavaGraphique extends JFrame {
                     g.setStroke(new BasicStroke(hover ? 3.5f : 2f));
                     g.draw(r);
                     g.setColor(TXT);
-                    g.setColor(alpha(c, 70));
-                    g.fillOval(20, 30, 42, 42);
+                    g.setColor(c);
+                    g.fillRoundRect(22, 26, 42, 42, 12, 12);
+                    g.setColor(SUR);
+                    g.setFont(f(Font.BOLD, 26));
+                    centre(g, p.nom.substring(0, 1).toUpperCase(), 43, 57);
                     g.setColor(TXT);
-                    g.setFont(f(Font.BOLD, 22));
-                    centre(g, p.nom.isEmpty() ? "?" : p.nom.substring(0, 1).toUpperCase(), 41, 59);
                     g.setFont(f(Font.BOLD, 19));
                     g.drawString(cut(p.nom, 15), 72, 52);
                     g.setFont(f(Font.PLAIN, 12));
                     g.setColor(TXT2);
-                    g.drawString((typeProjet(p.icone).isEmpty() ? "" : typeProjet(p.icone) + "  •  ") + ((long) s[3]) + " opération(s)", 72, 70);
+                    g.drawString(((long) s[3]) + " opération(s)", 72, 70);
                     g.drawString("Reste à vivre", 22, 100);
                     double solde = s[0] - s[1] - s[2];
                     g.setFont(f(Font.BOLD, 24));
@@ -1209,8 +1215,9 @@ public class TpJavaGraphique extends JFrame {
                     g.setColor(surX ? RED : alpha(TXT, 40));
                     g.fill(croix());
                     g.setColor(surX ? Color.WHITE : TXT);
-                    g.setFont(f(Font.BOLD, 13));
-                    centre(g, "X", w - 25, 32);
+                    g.setStroke(new BasicStroke(2f));
+                    g.drawLine(w - 30, 22, w - 20, 32);
+                    g.drawLine(w - 30, 32, w - 20, 22);
                     g.setColor(surC ? BLUE : alpha(TXT, 40));
                     g.fill(copie());
                     g.setColor(surC ? Color.WHITE : TXT);
@@ -1318,7 +1325,7 @@ public class TpJavaGraphique extends JFrame {
             side.setBackground(HEAD);
             side.setBorder(new CompoundBorder(new LineBorder(LINE, 1), new EmptyBorder(14, 12, 14, 12)));
             side.setPreferredSize(new Dimension(212, 0));
-            JButton retour = bouton("Accueil", INPUT, TXT);
+            JButton retour = bouton("Retour à l'accueil", INPUT, TXT);
             retour.setToolTipText("Retour à l'accueil (Ctrl+H)");
             retour.addActionListener(e -> retourAccueil());
             lTitre = label("", f(Font.BOLD, 16), TXT);
@@ -1419,7 +1426,7 @@ public class TpJavaGraphique extends JFrame {
         Object[] ligne(int r) {
             return new Object[]{modele.getValueAt(r, 0), modele.getValueAt(r, 1), modele.getValueAt(r, 2), modele.getValueAt(r, 3), modele.getValueAt(r, 4)};
         }
-        void reglerTitre() { lTitre.setText(cut(p.nom, 15)); lTitre.setForeground(acc()); }
+        void reglerTitre() { lTitre.setText(cut(p.nom, 17)); lTitre.setForeground(acc()); }
         void sauver() {
             try { ecrire(new File(DOSSIER, p.id + ".csv"), versLignes(modele)); ecrire(recFile(), versLignes(recModele)); }
             catch (IOException ex) { toast("Sauvegarde impossible : " + ex.getMessage(), RED); }
@@ -1545,7 +1552,7 @@ public class TpJavaGraphique extends JFrame {
             } else {
                 barBudget.setValue(0);
                 barBudget.setString("Dépenses du mois : " + FMT.format(dm) + " " + DEV);
-                lInfoBudget.setText("Budget mensuel non défini (bouton « Réglages du projet »)");
+                lInfoBudget.setText("Budget mensuel non défini (bouton Réglages)");
             }
             double sc = score();
             jauge.cible = sc;
@@ -1623,7 +1630,7 @@ public class TpJavaGraphique extends JFrame {
             milieu.setOpaque(false);
             milieu.add(champs, BorderLayout.NORTH);
             lStatut = label(" ", f(Font.BOLD, 13), GREEN);
-            JButton ajout = bouton("Ajouter l'opération", GREEN, SUR);
+            JButton ajout = bouton("+ Ajouter l'opération", GREEN, SUR);
             ajout.setFont(f(Font.BOLD, 14));
             ajout.setPreferredSize(new Dimension(0, 42));
             ajout.addActionListener(e -> ajouter());
@@ -1727,7 +1734,7 @@ public class TpJavaGraphique extends JFrame {
             cFiltreType.addActionListener(e -> filtrer());
             JPanel recherche = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
             recherche.setOpaque(false);
-            recherche.add(label("", f(Font.PLAIN, 16), TXT));
+            recherche.add(label("Rechercher :", f(Font.BOLD, 13), TXT2));
             recherche.add(tRecherche);
             recherche.add(cFiltreType);
             JPanel ligne1 = new JPanel(new BorderLayout());
@@ -1922,7 +1929,7 @@ public class TpJavaGraphique extends JFrame {
             JPanel pn = new JPanel(new BorderLayout(0, 10));
             pn.setBackground(PANEL);
             pn.setBorder(new CompoundBorder(new LineBorder(LINE, 2), new EmptyBorder(16, 16, 16, 16)));
-            JButton bAdd = bouton("Ajouter un modèle", GREEN, SUR), bDel = bouton("Supprimer", RED, Color.WHITE), bApp = bouton("Appliquer pour ce mois", PURPLE, Color.WHITE);
+            JButton bAdd = bouton("+ Ajouter un modèle", GREEN, SUR), bDel = bouton("Supprimer", RED, Color.WHITE), bApp = bouton("Appliquer pour ce mois", PURPLE, Color.WHITE);
             bAdd.addActionListener(e -> ajouterRec());
             bDel.addActionListener(e -> supprimerRec());
             bApp.addActionListener(e -> appliquerRec());
@@ -2327,7 +2334,7 @@ public class TpJavaGraphique extends JFrame {
                 }
                 g.setColor(TXT2);
                 g.setFont(f(Font.ITALIC, 11));
-                g.drawString("Sous chaque mois : net = revenus − dépenses − épargne", left, h - 12);
+                g.drawString("Sous chaque mois : net = revenus - dépenses - épargne", left, h - 12);
             }
         }
 
